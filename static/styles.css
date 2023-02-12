@@ -1,0 +1,10 @@
+.thumbnail {
+	width: 30vw;
+	height: auto;
+}
+
+.news {
+	padding-left: 10px;
+	margin: 10px;
+	border: 1px solid lightgrey;
+}
