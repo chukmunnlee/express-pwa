@@ -10,7 +10,7 @@ const newsKey = process.env.NEWSAPI_KEY
 const app = express();
 const news = new News(newsKey)
 
-app.engine('hbs', engine({ defaultLayout: 'main.hbs' }))
+app.engine('hbs', engine({ defaultLayout: 'main', extname: '.hbs' }))
 app.set('view engine', 'hbs')
 
 app.use(morgan('common'))
@@ -23,7 +23,7 @@ app.get(['/', '/index.html'], (req, resp) => {
 			resp.render('news', { 
 				articles: news.articles, 
 				hasArticles: news.articles.length > 0,
-				q
+				country, q
 			})
 		})
 })

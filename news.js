@@ -11,7 +11,6 @@ module.exports = function(newsKey) {
 		if (!!q)
 			url.searchParams.append('q', q)
 		url.searchParams.append('pageSize', pageSize)
-		console.info('>>>> url = ', url)
 		return fetch(url, { method: 'GET', })
 			.then(result => result.json())
 	}
