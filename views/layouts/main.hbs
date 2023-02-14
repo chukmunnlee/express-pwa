@@ -10,6 +10,12 @@
 	<body>
 
 		{{{ body }}}
-		
+
+		<script type="javascript">
+			if ('serviceWorker' in navigator) {
+				console.info('Registering service worker')
+				navigator.serviceWorker.register('/sw.js')
+			}
+		</script>
 	</body>
 </html>
