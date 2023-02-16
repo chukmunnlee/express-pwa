@@ -22,7 +22,7 @@ const assets = [
 ]
 
 // Install cache
-self.addEventListener('install', async (event) => {
+self.addEventListener('install', (event) => {
 	event.waitUntil(
 		caches.open(cacheName)
 			.then (cache => {
@@ -41,4 +41,18 @@ self.addEventListener('install', async (event) => {
 	)
 })
 
+// Network first, callback to cache
+self.addEventListener('fetch', (event) => {
+	console.info('>>>> request.mode: ', event.request.mode)
+	event.respondWith(
+		caches.open(cacheName)
+			.then(cache => 
+				fetch(event.request.url)
+					.then(resp => {
+						cache.put(event.request, resp.clone())
+						return resp
+					})
+			).catch(error => cache.match(event.request.url))
+	)
+})
 

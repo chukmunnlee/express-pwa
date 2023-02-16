@@ -4,34 +4,11 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>Main</title>
+
 		<link rel="stylesheet" href="/styles.css">
 		<link rel="manifest" href="/manifest.json">
-		<script type="module">
-		import {Workbox} from 
-			'https://storage.googleapis.com/workbox-cdn/releases/6.4.1/workbox-window.prod.mjs';
 
-			if ('serviceWorker' in navigator) {
-				const wb = new Workbox('/sw.js');
-
-				wb.addEventListener('waiting', event => {
-					console.log('Waiting to activate sw.js')
-				})
-
-				wb.addEventListener('activated', event => {
-					console.info('event: ', event);
-				})
-
-				wb.register();
-			}
-		</script>
-<!--
-		<script>
-			if ('serviceWorker' in navigator) {
-				console.info('Registering service worker')
-				navigator.serviceWorker.register('/sw.js')
-			}
-		</script>
--->
+		<script type="module" src="/register_sw.js"> </script>
 	</head>
 	<body>
 
