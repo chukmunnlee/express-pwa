@@ -8,3 +8,14 @@
 	margin: 10px;
 	border: 1px solid lightgrey;
 }
+
+.full {
+	width: 98vw;
+	height: 98vh;
+}
+
+.center-it {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
