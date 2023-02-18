@@ -12,35 +12,26 @@
 {{#if hasArticles}}
 	{{#each articles}}
 		<article>
-			<table>
-				<tr>
-					<td>
-						<div>
-							{{#if this.urlToImage}}
-								<img src="{{ this.urlToImage }}" class="thumbnail">
-							{{else}}
-								<img src="/placeholder.png" class="thumbnail">
-							{{/if}}
-						</div>
-					</td>
-					<td>
-						<div class="news">
-							<a href="{{ this.url }}">
-								<h3>{{ this.title }}</h3>
-							</a>
-							<p>
-							<div>Author: {{ this.author }}</div>
-							<div>Date: {{ this.publishedAt }}</div>
-							</p>
-							<p><i>{{ this.description }}</i></p>
-							<p>{{ this.content }}</p>
-						</div>
-					</td>
-				</tr>
-			</table>
+			<div class="image">
+				{{#if this.urlToImage}}
+				<img src="{{ this.urlToImage }}" class="thumbnail">
+				{{else}}
+				<img src="/placeholder.png" class="thumbnail">
+				{{/if}}
+			</div>
+			<div class="news">
+				<a href="{{ this.url }}">
+					<h3>{{ this.title }}</h3>
+				</a>
+				<p>
+				<div>Author: {{ this.author }}</div>
+				<div>Date: {{ this.publishedAt }}</div>
+				</p>
+				<p><i>{{ this.description }}</i></p>
+				<p>{{ this.content }}</p>
+			</div>
 		</article>
 	{{/each}}
-
 {{else}}
 	<h2>No news found</h2>
 {{/if}}

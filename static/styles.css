@@ -1,6 +1,14 @@
+article {
+	width: 99vw;
+}
+
 .thumbnail {
 	width: 30vw;
 	height: auto;
+}
+
+.image {
+	padding-left: 10px;
 }
 
 .news {
