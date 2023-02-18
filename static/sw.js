@@ -6,6 +6,7 @@ const assets = [
 	'/placeholder.png',
 	'/polar-bear.png',
 	'/unplugged.png',
+	'/dov-bear.gif',
 	'/styles.css',
 	'/offline.html',
 	'/icon/android-icon-192x192-seochecker-manifest-6612.png',
@@ -43,7 +44,22 @@ self.addEventListener('fetch', (event) => {
 	if (request.headers.get('Accept').includes('text/html')) {
 		event.respondWith(
 			fetch(request)
-				.catch(() => caches.match("/offline.html"))
+				.then(response => {
+					const copy = response.clone()
+					event.waitUntil(
+						caches.open(cacheName)
+							.then(cache => cache.put(request, copy))
+					)
+					return response
+				})
+				.catch(() => 
+					caches.match(request)
+						.then(cacheReq => {
+							if (!!cacheReq)
+								return cacheReq
+							return caches.match('/offline.html')
+						})
+				)
 		)
 		return 
 	}
@@ -60,7 +76,39 @@ self.addEventListener('fetch', (event) => {
 
 	// Go to the network
 	console.info('>>> fetching from network')
-	event.respondWith(fetch(request))
+	event.respondWith(
+		fetch(request)
+			.then(response => {
+				if (request.url.startsWith('http')) {
+					const copy = response.clone()
+					// Cache a copy
+					event.waitUntil(
+						caches.open(cacheName)
+							.then(cache => cache.put(request, copy))
+					)
+				}
+				return response
+			})
+			.catch(error => {
+				// Try locating the request from cache
+				caches.match(request)
+					.then(cacheResp => {
+						// return from catch if we find it
+						if (!!cacheResp)
+							return cacheResp
+						// If it is image then 
+						if (request.headers.get('Accept').includes('image/'))
+							return caches.match('/placeholder.png')
+
+						// Create a response 
+						return new Response(`Error: cannot load ${request.url}`, { 
+							status: 404, 
+							statusText: "Not found", 
+							headers: { 'Content-Type': 'text/plain' } 
+						})
+					})
+			})
+	)
 })
 
 	// Network first

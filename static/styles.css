@@ -9,6 +9,11 @@
 	border: 1px solid lightgrey;
 }
 
+.big-text {
+	font-size: 3em;
+	font-family: monospace;
+}
+
 .full {
 	width: 98vw;
 	height: 98vh;
@@ -16,6 +21,7 @@
 
 .center-it {
 	display: flex;
+	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 }

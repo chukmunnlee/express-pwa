@@ -1,16 +1,10 @@
-import { Workbox } from 'https://storage.googleapis.com/workbox-cdn/releases/6.4.1/workbox-window.prod.mjs';
-
 if ('serviceWorker' in navigator) {
-	const wb = new Workbox('/sw.js');
-
-	wb.addEventListener('waiting', event => {
-		console.log('Waiting to activate sw.js')
-	})
-
-	wb.addEventListener('activated', event => {
-		console.info('event: ', event);
-	})
-
-	wb.register();
+	navigator.serviceWorker.register('/sw.js', {scope: '/' })
+		.then(reg => {
+			console.info('>>> registered service worker ', reg)
+		})
+		.catch(err => {
+			console.info('>>> cannot register service worker ', err)
+			alert(`Cannot register service worker ${JSON.stringify(err)}`)
+		})
 }
-
