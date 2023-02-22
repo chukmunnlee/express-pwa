@@ -1,0 +1,83 @@
+Register service worker
+
+	if ('serviceWorker' in navigator) {
+		navigator.serviceWorker.register('/sw.js', {scope: '/' })
+			.then(reg => {
+				console.info('>>> registered service worker ', reg)
+			})
+			.catch(err => {
+				console.info('>>> cannot register service worker ', err)
+				alert(`Cannot register service worker ${JSON.stringify(err)}`)
+			})
+	}
+
+Service Worker
+	Cache offline assets on installing service worker 
+		
+		const cacheName = "myCache"
+
+		self.addEventListener('install', (event) => {
+			event.waitUntil(
+				caches.open(cacheName)
+					.then (cache => cache.addAll(assets))
+			)
+		})
+
+	Offline page
+		self.addEventListener('fetch', (event) => {
+			const request = event.request
+
+			console.info('>>>> event ', event)
+			console.info('>>>> request.url ', request.url)
+
+			event.respondWith(
+				fetch(request)
+					.catch(error => {
+						// Landing page
+						if (request.headers.get('Accept').includes('text/html'))
+							return caches.open(cacheName)
+										.then(cache => cache.match('/offline.html'))
+						return caches.match(request)
+					})
+			)
+		})
+
+	Cache response
+		event.respondWith(
+			fetch(request)
+				.then(resp => {
+					const copy = resp.clone()
+					event.waitUntil(
+						caches.open(cacheName)
+							.then(cache => {
+								cache.put(request, copy)
+							})
+					)
+					return resp
+				})
+				.catch(error => {
+					// Landing page
+					if (request.headers.get('Accept').includes('text/html'))
+						return caches.open(cacheName)
+									.then(cache =>
+										cache.match(request)
+											.then(resp => {
+												if (!!resp)
+													return resp
+												return caches.match('/offline.html')
+											})
+									)
+					// Everything else try to match it
+					return caches.match(request)
+						.then(resp => {
+							if (!!resp)
+								return resp
+
+							if (request.headers.get('Accept').includes('image/')
+								return caches.match('/placeholder.png')
+
+							return new Response(`Error: cannot load ${request.url}`,
+								{ status: 404 })
+						})
+				})
+		)
